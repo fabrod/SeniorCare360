@@ -72,24 +72,13 @@ export default function HomeScreen({ navigation }: any) {
       ]
     );
   };
-
-  const handleLogout = () => {
-    Alert.alert(
-      'Sign Out',
-      'Are you sure you want to sign out?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Sign Out',
-          style: 'destructive',
-          onPress: async () => {
-            await authService.logout();
-            dispatch(logout());
-          },
-        },
-      ]
-    );
-  };
+const handleLogout = async () => {
+  const confirmed = window.confirm('Are you sure you want to sign out?');
+  if (confirmed) {
+    await authService.logout();
+    dispatch(logout());
+  }
+};
 
   const activeMeds = meds.filter(m => m.status === 'active');
   const refillNeeded = meds.filter(m => m.refills_remaining === 0);
