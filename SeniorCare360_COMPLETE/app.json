@@ -1,0 +1,66 @@
+{
+  "expo": {
+    "name": "SeniorCare360",
+    "slug": "seniorcare360",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1B6CA8"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.seniorcare360.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "SeniorCare360 uses your location for emergency SOS alerts.",
+        "NSLocationAlwaysUsageDescription": "SeniorCare360 uses your location for emergency SOS alerts.",
+        "NSCameraUsageDescription": "Used to take profile photos.",
+        "NSPhotoLibraryUsageDescription": "Used to select profile photos."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1B6CA8"
+      },
+      "package": "com.seniorcare360.app",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#1B6CA8"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow SeniorCare360 to use your location for emergency services."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "your-eas-project-id"
+      }
+    }
+  }
+}
