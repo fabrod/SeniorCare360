@@ -2,7 +2,7 @@ import axios from 'axios';
 import { storage } from '../utils/storage';
 
 // For web demo mode: use mock data when no backend available
-const API_URL = (process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8000');
+const API_URL = (process.env.EXPO_PUBLIC_API_URL || 'https://seniorcare360-api.onrender.com');
 
 const api = axios.create({
   baseURL: API_URL,
