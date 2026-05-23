@@ -223,6 +223,45 @@ class EmergencyContactResponse(BaseModel):
         from_attributes = True
 
 
+# ─── Family Members ───────────────────────────────────────────────────────────
+
+class FamilyMemberCreate(BaseModel):
+    name: str
+    member_relationship: Optional[str] = None
+    email: Optional[EmailStr] = None
+    phone: Optional[str] = None
+    can_view_medications: bool = True
+    can_view_vitals: bool = True
+    can_receive_sos: bool = True
+
+
+class FamilyMemberUpdate(BaseModel):
+    name: Optional[str] = None
+    member_relationship: Optional[str] = None
+    email: Optional[EmailStr] = None
+    phone: Optional[str] = None
+    can_view_medications: Optional[bool] = None
+    can_view_vitals: Optional[bool] = None
+    can_receive_sos: Optional[bool] = None
+    invite_accepted: Optional[bool] = None
+
+
+class FamilyMemberResponse(BaseModel):
+    id: int
+    name: str
+    member_relationship: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    can_view_medications: bool
+    can_view_vitals: bool
+    can_receive_sos: bool
+    invite_accepted: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
 # ─── SOS ──────────────────────────────────────────────────────────────────────
 
 class SOSRequest(BaseModel):

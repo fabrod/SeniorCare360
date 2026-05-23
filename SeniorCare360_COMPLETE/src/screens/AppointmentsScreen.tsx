@@ -4,7 +4,7 @@ import {
   Modal, TextInput, Alert, Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { appointmentService } from '../services/api';
+import { appointmentService, familyService } from '../services/api';
 import { Colors, Typography, Spacing, BorderRadius, Shadows } from '../theme';
 import { format, addHours, startOfHour } from 'date-fns';
 
@@ -319,25 +319,181 @@ export function AppointmentsScreen({ navigation }: any) {
 
 // ─── FamilyScreen ──────────────────────────────────────────────────────────────
 export function FamilyScreen({ navigation }: any) {
+  const [members, setMembers] = useState<any[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({
+    name: '',
+    member_relationship: '',
+    email: '',
+    phone: '',
+    can_view_medications: true,
+    can_view_vitals: true,
+    can_receive_sos: true,
+  });
+
+  const loadFamily = async () => {
+    try {
+      setMembers(await familyService.list());
+    } catch {}
+  };
+
+  useEffect(() => { loadFamily(); }, []);
+
+  const updateForm = (key: string, value: string | boolean) =>
+    setForm(prev => ({ ...prev, [key]: value }));
+
+  const handleInvite = async () => {
+    if (!form.name.trim()) {
+      Alert.alert('Required', 'Please enter your family member\'s name.'); return;
+    }
+    if (!form.email.trim() && !form.phone.trim()) {
+      Alert.alert('Required', 'Please enter an email or phone number.'); return;
+    }
+
+    try {
+      await familyService.invite({
+        name: form.name.trim(),
+        member_relationship: form.member_relationship.trim() || undefined,
+        email: form.email.trim().toLowerCase() || undefined,
+        phone: form.phone.trim() || undefined,
+        can_view_medications: form.can_view_medications,
+        can_view_vitals: form.can_view_vitals,
+        can_receive_sos: form.can_receive_sos,
+      });
+      await loadFamily();
+      setShowModal(false);
+      setForm({
+        name: '',
+        member_relationship: '',
+        email: '',
+        phone: '',
+        can_view_medications: true,
+        can_view_vitals: true,
+        can_receive_sos: true,
+      });
+    } catch (err: any) {
+      Alert.alert('Could Not Invite', err?.response?.data?.detail || 'Please try again.');
+    }
+  };
+
+  const handleDelete = (member: any) => {
+    Alert.alert('Remove Family Member', `Remove ${member.name} from your circle?`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Remove',
+        style: 'destructive',
+        onPress: async () => {
+          await familyService.delete(member.id);
+          await loadFamily();
+        },
+      },
+    ]);
+  };
+
   return (
     <View style={s.container}>
       <View style={s.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={s.backBtn}>
           <Ionicons name="arrow-back" size={28} color={Colors.white} />
         </TouchableOpacity>
-        <Text style={s.headerTitle}>👨‍👩‍👧 Family Circle</Text>
-      </View>
-      <View style={s.centerContent}>
-        <Ionicons name="people" size={80} color={Colors.primaryLight} />
-        <Text style={s.comingSoonTitle}>Family Circle</Text>
-        <Text style={s.comingSoonText}>
-          Invite family members to view your medications, health vitals, and receive SOS alerts when you need help.
-          {'\n\n'}Manage your safety network through Emergency Contacts.
-        </Text>
-        <TouchableOpacity style={s.goBtn} onPress={() => navigation.navigate('Emergency')}>
-          <Text style={s.goBtnText}>Manage Emergency Contacts →</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={s.headerTitle}>👨‍👩‍👧 Family Circle</Text>
+          <Text style={s.headerSub}>{members.length} trusted contact{members.length === 1 ? '' : 's'}</Text>
+        </View>
+        <TouchableOpacity style={s.addBtn} onPress={() => setShowModal(true)}>
+          <Ionicons name="add" size={26} color={Colors.white} />
         </TouchableOpacity>
       </View>
+
+      <ScrollView contentContainerStyle={s.content}>
+        <View style={s.familyIntro}>
+          <Ionicons name="shield-checkmark" size={30} color={Colors.primary} />
+          <Text style={s.familyIntroText}>
+            Add trusted people who can help monitor medications, vitals, and emergency alerts.
+          </Text>
+        </View>
+
+        {members.length === 0 && (
+          <View style={s.empty}>
+            <Ionicons name="people-outline" size={64} color={Colors.border} />
+            <Text style={s.emptyTitle}>No family members yet</Text>
+            <Text style={s.emptySub}>Tap + to invite someone you trust</Text>
+          </View>
+        )}
+
+        {members.map(member => (
+          <View key={member.id} style={s.familyCard}>
+            <View style={s.familyAvatar}>
+              <Text style={s.familyInitial}>{member.name?.[0]?.toUpperCase() || '?'}</Text>
+            </View>
+            <View style={s.familyInfo}>
+              <Text style={s.familyName}>{member.name}</Text>
+              {member.member_relationship && <Text style={s.familyMeta}>{member.member_relationship}</Text>}
+              {!!member.email && <Text style={s.familyMeta}>{member.email}</Text>}
+              {!!member.phone && <Text style={s.familyMeta}>{member.phone}</Text>}
+              <Text style={[s.familyStatus, member.invite_accepted ? s.accepted : s.pending]}>
+                {member.invite_accepted ? 'Connected' : 'Invite pending'}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => handleDelete(member)} style={s.deleteBtn}>
+              <Ionicons name="trash-outline" size={20} color={Colors.textMuted} />
+            </TouchableOpacity>
+          </View>
+        ))}
+
+        <TouchableOpacity style={s.goBtn} onPress={() => navigation.navigate('Emergency')}>
+          <Ionicons name="alert-circle" size={20} color={Colors.white} />
+          <Text style={s.goBtnText}>Manage Emergency Contacts</Text>
+        </TouchableOpacity>
+      </ScrollView>
+
+      <Modal visible={showModal} animationType="slide" presentationStyle="pageSheet">
+        <View style={s.modal}>
+          <View style={s.modalHeader}>
+            <Text style={s.modalTitle}>Invite Family Member</Text>
+            <TouchableOpacity onPress={() => setShowModal(false)}>
+              <Ionicons name="close" size={28} color={Colors.textPrimary} />
+            </TouchableOpacity>
+          </View>
+          <ScrollView contentContainerStyle={s.modalForm} keyboardShouldPersistTaps="handled">
+            {([
+              ['Full Name *', 'name', 'e.g. Maria Johnson', 'default'],
+              ['Relationship', 'member_relationship', 'Daughter, spouse, caregiver', 'default'],
+              ['Email', 'email', 'maria@example.com', 'email-address'],
+              ['Phone', 'phone', '(407) 555-0100', 'phone-pad'],
+            ] as [string, string, string, any][]).map(([label, key, placeholder, keyboard]) => (
+              <View key={key}>
+                <Text style={s.formLabel}>{label}</Text>
+                <TextInput
+                  style={s.formInput}
+                  value={(form as any)[key]}
+                  onChangeText={value => updateForm(key, value)}
+                  placeholder={placeholder}
+                  placeholderTextColor={Colors.textMuted}
+                  keyboardType={keyboard}
+                  autoCapitalize={keyboard === 'default' ? 'words' : 'none'}
+                  autoCorrect={false}
+                />
+              </View>
+            ))}
+
+            {([
+              ['can_view_medications', 'Can view medications'],
+              ['can_view_vitals', 'Can view health vitals'],
+              ['can_receive_sos', 'Can receive SOS alerts'],
+            ] as [string, string][]).map(([key, label]) => (
+              <TouchableOpacity key={key} style={s.permissionRow} onPress={() => updateForm(key, !(form as any)[key])}>
+                <Ionicons name={(form as any)[key] ? 'checkbox' : 'square-outline'} size={24} color={Colors.primary} />
+                <Text style={s.permissionText}>{label}</Text>
+              </TouchableOpacity>
+            ))}
+
+            <TouchableOpacity style={s.saveBtn} onPress={handleInvite}>
+              <Text style={s.saveBtnText}>Send Invite</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -483,10 +639,61 @@ const s = StyleSheet.create({
   saveBtnText: { color: Colors.white, fontSize: Typography.button, fontWeight: Typography.bold },
 
   // Family
-  centerContent: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: Spacing.xl, gap: Spacing.md },
-  comingSoonTitle: { fontSize: Typography.displayM, fontWeight: Typography.extraBold, color: Colors.textPrimary },
-  comingSoonText: { fontSize: Typography.body, color: Colors.textSecondary, textAlign: 'center', lineHeight: 26 },
-  goBtn: { backgroundColor: Colors.primary, borderRadius: BorderRadius.md, padding: 16 },
+  familyIntro: {
+    backgroundColor: Colors.infoLight,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+    marginBottom: Spacing.md,
+  },
+  familyIntroText: { flex: 1, fontSize: Typography.bodySmall, color: Colors.primary, lineHeight: 21 },
+  familyCard: {
+    backgroundColor: Colors.white,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+    marginBottom: Spacing.sm,
+    ...Shadows.card,
+  },
+  familyAvatar: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: Colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  familyInitial: { fontSize: Typography.heading2, fontWeight: Typography.bold, color: Colors.white },
+  familyInfo: { flex: 1 },
+  familyName: { fontSize: Typography.body, fontWeight: Typography.bold, color: Colors.textPrimary },
+  familyMeta: { fontSize: Typography.bodySmall, color: Colors.textSecondary, marginTop: 2 },
+  familyStatus: { fontSize: Typography.caption, fontWeight: Typography.bold, marginTop: 6 },
+  accepted: { color: Colors.success },
+  pending: { color: Colors.warning },
+  permissionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    padding: Spacing.md,
+    backgroundColor: Colors.offWhite,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.sm,
+  },
+  permissionText: { fontSize: Typography.body, color: Colors.textPrimary },
+  goBtn: {
+    backgroundColor: Colors.primary,
+    borderRadius: BorderRadius.md,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    marginTop: Spacing.lg,
+  },
   goBtnText: { color: Colors.white, fontSize: Typography.button, fontWeight: Typography.bold },
 
   // MedDetail

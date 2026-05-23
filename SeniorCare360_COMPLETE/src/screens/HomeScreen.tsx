@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
   RefreshControl, Alert, StatusBar,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 import { RootState } from '../store';
 import { authService, emergencyService, medicationService } from '../services/api';
-import { logout } from '../store';
+import { logout, setMedications } from '../store';
 import { Colors, Typography, Spacing, BorderRadius, Shadows } from '../theme';
 import { format } from 'date-fns';
 
@@ -28,7 +29,8 @@ export default function HomeScreen({ navigation }: any) {
   const dispatch = useDispatch();
   const { firstName } = useSelector((state: RootState) => state.auth);
   const profile = useSelector((state: RootState) => state.user.profile);
-  const [meds, setMeds] = useState<any[]>([]);
+  // Read meds from Redux so deletions from any screen are reflected immediately
+  const meds = useSelector((state: RootState) => state.medications.list);
   const [refreshing, setRefreshing] = useState(false);
   const [sosLoading, setSosLoading] = useState(false);
   const today = format(new Date(), 'EEEE, MMMM do');
@@ -36,11 +38,14 @@ export default function HomeScreen({ navigation }: any) {
   const loadData = useCallback(async () => {
     try {
       const m = await medicationService.list();
-      setMeds(m);
+      dispatch(setMedications(m));
     } catch {}
-  }, []);
+  }, [dispatch]);
 
-  useEffect(() => { loadData(); }, []);
+  // Reload from API every time this screen comes into focus
+  useFocusEffect(
+    useCallback(() => { loadData(); }, [loadData])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -72,13 +77,19 @@ export default function HomeScreen({ navigation }: any) {
       ]
     );
   };
-const handleLogout = async () => {
-  const confirmed = window.confirm('Are you sure you want to sign out?');
-  if (confirmed) {
-    await authService.logout();
-    dispatch(logout());
-  }
-};
+  const handleLogout = () => {
+    Alert.alert('Sign Out', 'Are you sure you want to sign out?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Sign Out',
+        style: 'destructive',
+        onPress: async () => {
+          await authService.logout();
+          dispatch(logout());
+        },
+      },
+    ]);
+  };
 
   const activeMeds = meds.filter(m => m.status === 'active');
   const refillNeeded = meds.filter(m => m.refills_remaining === 0);

@@ -89,6 +89,22 @@ export const emergencyService = {
     api.post('/emergency/sos', data).then(r => r.data),
 };
 
+// ─── Family Circle ───────────────────────────────────────────────────────────
+export const familyService = {
+  list: () => api.get('/family/').then(r => r.data),
+  invite: (data: {
+    name: string;
+    member_relationship?: string;
+    email?: string;
+    phone?: string;
+    can_view_medications?: boolean;
+    can_view_vitals?: boolean;
+    can_receive_sos?: boolean;
+  }) => api.post('/family/', data).then(r => r.data),
+  update: (id: number, data: any) => api.put(`/family/${id}`, data).then(r => r.data),
+  delete: (id: number) => api.delete(`/family/${id}`),
+};
+
 // ─── Benefits ─────────────────────────────────────────────────────────────────
 export const benefitsService = {
   list: (category?: string) =>

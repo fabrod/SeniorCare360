@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import engine, Base
 from app.api.auth import router as auth_router
+from app.api.family import router as family_router
 from app.api.users import router as users_router
 from app.api.medications import router as medications_router
 from app.api.health_emergency_benefits import (
@@ -34,6 +35,7 @@ app.add_middleware(
 # Register all routers
 app.include_router(auth_router)
 app.include_router(users_router)
+app.include_router(family_router)
 app.include_router(medications_router)
 app.include_router(vitals_router)
 app.include_router(appointments_router)

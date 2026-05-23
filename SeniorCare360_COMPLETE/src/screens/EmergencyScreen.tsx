@@ -12,7 +12,7 @@ export default function EmergencyScreen({ navigation }: any) {
   const [contacts, setContacts] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [sosLoading, setSosLoading] = useState(false);
-  const [form, setForm] = useState({ name: '', relationship: '', phone: '', email: '', is_primary: false, notify_on_sos: true });
+  const [form, setForm] = useState({ name: '', contact_relationship: '', phone: '', email: '', is_primary: false, notify_on_sos: true });
 
   const loadContacts = async () => {
     try { setContacts(await emergencyService.getContacts()); } catch {}
@@ -57,7 +57,7 @@ export default function EmergencyScreen({ navigation }: any) {
       await emergencyService.addContact(form);
       await loadContacts();
       setShowModal(false);
-      setForm({ name: '', relationship: '', phone: '', email: '', is_primary: false, notify_on_sos: true });
+      setForm({ name: '', contact_relationship: '', phone: '', email: '', is_primary: false, notify_on_sos: true });
     } catch { Alert.alert('Error', 'Could not add contact.'); }
   };
 
@@ -109,7 +109,7 @@ export default function EmergencyScreen({ navigation }: any) {
             </View>
             <View style={styles.contactInfo}>
               <Text style={styles.contactName}>{c.name} {c.is_primary && '⭐'}</Text>
-              {c.relationship && <Text style={styles.contactRel}>{c.relationship}</Text>}
+              {c.contact_relationship && <Text style={styles.contactRel}>{c.contact_relationship}</Text>}
               <Text style={styles.contactPhone}>{c.phone}</Text>
             </View>
             <View style={styles.contactActions}>
@@ -136,7 +136,7 @@ export default function EmergencyScreen({ navigation }: any) {
             </TouchableOpacity>
           </View>
           <ScrollView contentContainerStyle={styles.modalForm}>
-            {([['Full Name *', 'name', 'default'], ['Relationship', 'relationship', 'default'], ['Phone Number *', 'phone', 'phone-pad'], ['Email', 'email', 'email-address']] as [string, string, any][]).map(([label, field, kb]) => (
+            {([['Full Name *', 'name', 'default'], ['Relationship', 'contact_relationship', 'default'], ['Phone Number *', 'phone', 'phone-pad'], ['Email', 'email', 'email-address']] as [string, string, any][]).map(([label, field, kb]) => (
               <View key={field}>
                 <Text style={styles.formLabel}>{label}</Text>
                 <TextInput
