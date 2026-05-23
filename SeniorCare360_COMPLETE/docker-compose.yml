@@ -27,8 +27,10 @@ services:
       DATABASE_URL: postgresql://seniorcare:seniorcare_pass@db:5432/seniorcare360
       SECRET_KEY: seniorcare360-dev-secret-key-change-in-production
       ALGORITHM: HS256
-      ACCESS_TOKEN_EXPIRE_MINUTES: 10080
+      ACCESS_TOKEN_EXPIRE_MINUTES: 1440
       ENVIRONMENT: development
+      CORS_ORIGINS: http://localhost:19006,http://localhost:8081,http://localhost:8000
+      SHOW_API_DOCS: "true"
     depends_on:
       db:
         condition: service_healthy

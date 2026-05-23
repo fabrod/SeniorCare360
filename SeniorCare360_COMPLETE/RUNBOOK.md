@@ -57,9 +57,13 @@ Required backend env:
 DATABASE_URL=postgresql://seniorcare:seniorcare_pass@localhost:5432/seniorcare360
 SECRET_KEY=seniorcare360-dev-secret-key-change-in-production
 ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=10080
+ACCESS_TOKEN_EXPIRE_MINUTES=1440
 ENVIRONMENT=development
+CORS_ORIGINS=http://localhost:19006,http://localhost:8081,http://localhost:8000
+SHOW_API_DOCS=true
 ```
+
+For production, use a long random `SECRET_KEY`, set `ENVIRONMENT=production`, keep `SHOW_API_DOCS=false`, and replace `CORS_ORIGINS` with the exact deployed frontend origin(s).
 
 Start Postgres and the API with Docker:
 
