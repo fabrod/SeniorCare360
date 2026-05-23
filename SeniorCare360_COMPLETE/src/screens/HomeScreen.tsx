@@ -174,6 +174,10 @@ export default function HomeScreen({ navigation }: any) {
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>
 
+        <View style={styles.copyrightContainer}>
+          <Text style={styles.copyrightText}>© 2026 SeniorCare360. All rights reserved.</Text>
+        </View>
+
         <View style={{ height: 32 }} />
       </ScrollView>
     </View>
@@ -210,4 +214,6 @@ const styles = StyleSheet.create({
   deliverNowText: { color: Colors.white, fontSize: Typography.bodySmall, fontWeight: Typography.bold },
   signOutBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm, backgroundColor: Colors.dangerLight, borderRadius: BorderRadius.lg, padding: 18, marginTop: Spacing.xl, borderWidth: 1.5, borderColor: Colors.danger + '40', minHeight: 60 },
   signOutText: { fontSize: Typography.button, fontWeight: Typography.bold, color: Colors.danger },
+  copyrightContainer: { alignItems: 'center', marginTop: Spacing.lg, paddingVertical: Spacing.sm },
+  copyrightText: { fontSize: Typography.caption, color: Colors.textMuted, textAlign: 'center' },
 });
