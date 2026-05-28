@@ -25,6 +25,7 @@ export default function About() {
       </div>
 
       <a href="/" className="inline-block text-blue-700 font-semibold text-sm">← Back to Home</a>
+      <p className="mt-6 text-xs text-gray-400 text-center">© 2026 SeniorCare360. All rights reserved.</p>
     </div>
   );
 }

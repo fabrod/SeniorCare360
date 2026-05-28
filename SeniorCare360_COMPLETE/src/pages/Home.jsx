@@ -110,6 +110,8 @@ export default function Home() {
         <span>·</span>
         <Link to="/contact" className="hover:underline">Contact</Link>
       </div>
+
+      <p className="mt-4 text-xs text-gray-400">© 2026 SeniorCare360. All rights reserved.</p>
     </div>
   );
 }

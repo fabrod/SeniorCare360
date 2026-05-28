@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, Pill, Truck, Trash2, X, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus, Pill, Truck, Store, Trash2, X, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const STATUS_COLORS = {
@@ -118,14 +118,24 @@ export default function MedicationsScreen() {
               <div className="inline-block rounded-full px-3 py-1 mb-3 border" style={{ backgroundColor: sc.bg, borderColor: sc.border }}>
                 <span className="text-xs font-semibold" style={{ color: sc.text }}>{STATUS_LABELS[med.status] || med.status}</span>
               </div>
-              <button
-                onClick={() => navigate("/delivery", { state: { med } })}
-                className="w-full py-3 rounded-xl flex items-center justify-center gap-2 text-white font-bold text-sm"
-                style={{ backgroundColor: "#1976a8" }}
-              >
-                <Truck size={16} color="white" />
-                🚚 Deliver to My Home
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => navigate("/delivery", { state: { med } })}
+                  className="flex-1 py-3 rounded-xl flex items-center justify-center gap-1.5 text-white font-bold text-sm"
+                  style={{ backgroundColor: "#1976a8" }}
+                >
+                  <Truck size={15} color="white" />
+                  Home Delivery
+                </button>
+                <button
+                  onClick={() => navigate("/send-to-pharmacy", { state: { med } })}
+                  className="flex-1 py-3 rounded-xl flex items-center justify-center gap-1.5 font-bold text-sm border-2"
+                  style={{ borderColor: "#1976a8", color: "#1976a8", backgroundColor: "#e3f2fd" }}
+                >
+                  <Store size={15} color="#1976a8" />
+                  Pharmacy
+                </button>
+              </div>
             </div>
           );
         })}

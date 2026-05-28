@@ -17,6 +17,7 @@ import FamilyScreen from './pages/FamilyScreen';
 import BenefitsScreen from './pages/BenefitsScreen';
 import DeliveryScreen from './pages/DeliveryScreen';
 import ProfileScreen from './pages/ProfileScreen';
+import SendToPharmacyScreen from './pages/SendToPharmacyScreen';
 import About from './pages/About';
 import Contact from './pages/Contact';
 
@@ -52,6 +53,7 @@ const AuthenticatedApp = () => {
       <Route path="/benefits" element={<BenefitsScreen />} />
       <Route path="/delivery" element={<DeliveryScreen />} />
       <Route path="/profile" element={<ProfileScreen />} />
+      <Route path="/send-to-pharmacy" element={<SendToPharmacyScreen />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/register" element={<Register />} />
