@@ -1,0 +1,36 @@
+{
+  "name": "Appointment",
+  "type": "object",
+  "properties": {
+    "doctor_name": {
+      "type": "string"
+    },
+    "specialty": {
+      "type": "string"
+    },
+    "clinic_name": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "appointment_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "is_completed": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "doctor_name",
+    "appointment_date"
+  ]
+}

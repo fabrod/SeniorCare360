@@ -1,0 +1,43 @@
+{
+  "name": "Vital",
+  "type": "object",
+  "properties": {
+    "vital_type": {
+      "type": "string",
+      "enum": [
+        "blood_pressure",
+        "glucose",
+        "heart_rate",
+        "weight",
+        "oxygen_saturation",
+        "temperature"
+      ],
+      "description": "Type of vital sign"
+    },
+    "value_primary": {
+      "type": "number",
+      "description": "Primary reading value"
+    },
+    "value_secondary": {
+      "type": "number",
+      "description": "Secondary value (e.g. diastolic for blood pressure)"
+    },
+    "unit": {
+      "type": "string",
+      "description": "Unit of measurement"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the reading was taken"
+    }
+  },
+  "required": [
+    "vital_type",
+    "value_primary"
+  ]
+}

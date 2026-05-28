@@ -1,0 +1,35 @@
+{
+  "name": "EmergencyContact",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "contact_relationship": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "is_primary": {
+      "type": "boolean",
+      "default": false
+    },
+    "notify_on_sos": {
+      "type": "boolean",
+      "default": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Additional notes about this contact (up to 1000 characters)",
+      "maxLength": 1000
+    }
+  },
+  "required": [
+    "name",
+    "phone"
+  ]
+}

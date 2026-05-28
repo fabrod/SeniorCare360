@@ -1,0 +1,100 @@
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  :root {
+
+    --accent: 235.5 70% 40%;
+
+    --accent-foreground: 210 40% 98%;
+
+    --background: 212.7 44% 95.1%;
+
+    --border: 217.1 29.6% 86.1%;
+
+    --card: 0 0% 100%;
+
+    --card-foreground: 222.2 84% 4.9%;
+
+    --destructive: 0 84.2% 60.2%;
+
+    --destructive-foreground: 210 40% 98%;
+
+    --foreground: 0 0% 0%;
+
+    --input: 214.3 31.8% 91.4%;
+
+    --muted: 210 16.7% 97.6%;
+
+    --muted-foreground: 222.2 84% 4.9%;
+
+    --popover: 212.7 44% 95.1%;
+
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 205.5 72.3% 38.2%;
+
+    --primary-foreground: 0 0% 100%;
+
+    --radius: 1.31rem;
+
+    --ring: 205.5 72.3% 38.2%;
+
+    --secondary: 216 20% 95.1%;
+
+    --secondary-foreground: 222.2 84% 4.9%;
+
+  }
+}
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes floatA {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(3deg); }
+}
+
+@keyframes r-11cv4x {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes r-imtty0 {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes r-t2lo5v {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes r-1pzkwqh {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(0%); }
+}
+
+@keyframes r-1iq689l {
+  0% { transform: translateY(0%); }
+  100% { transform: translateY(100%); }
+}

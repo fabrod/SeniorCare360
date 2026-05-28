@@ -1,0 +1,41 @@
+{
+  "name": "DeliveryRequest",
+  "type": "object",
+  "properties": {
+    "medication_name": {
+      "type": "string"
+    },
+    "medication_id": {
+      "type": "string"
+    },
+    "delivery_address": {
+      "type": "string"
+    },
+    "special_instructions": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "estimated_arrival": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "description": "Additional notes about this delivery (up to 1000 characters)",
+      "maxLength": 1000
+    }
+  },
+  "required": [
+    "medication_name",
+    "delivery_address"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "name": "Medication",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Brand name of the medication"
+    },
+    "generic_name": {
+      "type": "string",
+      "description": "Generic/chemical name"
+    },
+    "dosage": {
+      "type": "string",
+      "description": "e.g. 10mg"
+    },
+    "frequency": {
+      "type": "string",
+      "description": "e.g. Once daily in the morning"
+    },
+    "prescriber": {
+      "type": "string",
+      "description": "Prescribing doctor name"
+    },
+    "pharmacy_name": {
+      "type": "string",
+      "description": "Pharmacy name"
+    },
+    "pharmacy_rx_number": {
+      "type": "string",
+      "description": "Prescription number"
+    },
+    "refills_remaining": {
+      "type": "integer",
+      "default": 0
+    },
+    "instructions": {
+      "type": "string",
+      "description": "Special instructions"
+    },
+    "description": {
+      "type": "string",
+      "description": "Additional notes about this medication (up to 1000 characters)",
+      "maxLength": 1000
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "discontinued",
+        "refill_needed",
+        "ready_for_pickup",
+        "ready_for_delivery"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "FamilyMember",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "member_relationship": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "invite_accepted": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_view_medications": {
+      "type": "boolean",
+      "default": true
+    },
+    "can_view_vitals": {
+      "type": "boolean",
+      "default": true
+    },
+    "can_receive_sos": {
+      "type": "boolean",
+      "default": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Additional notes about this family member (up to 1000 characters)",
+      "maxLength": 1000
+    }
+  },
+  "required": [
+    "name"
+  ]
+}
